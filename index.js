@@ -3,6 +3,8 @@ let planes = [  { nombre: "Plan x2 semanas", precio: 500, clases: 4, descuento: 
                 { nombre: "Plan x8 semanas", precio: 500, clases: 12, descuento: 0.80}
             ];
 
+const botones = ["botonUno", "botonDos", "botonTres"];
+
 class Persona {
     constructor(nombre, edad) {
         this.nombre = nombre.toUpperCase();
@@ -15,7 +17,7 @@ function inicio() {
 }
 
 
-let contenedor = document.getElementById("container")
+let secTitulo = document.getElementById("seccionTitulo")
 
 inicio()
 let nombre = prompt("Ingrese su nombre: ");
@@ -28,12 +30,15 @@ let nombre = prompt("Ingrese su nombre: ");
 let encabezado = document.createElement("div")
 encabezado.className = "text-center"
 encabezado.innerHTML = `
-<div class="card">
-    <h3>Bienvenido ${cliente.nombre}
+<div>
+    <h3>Bienvenido ${cliente.nombre}</h3>
 </div>`;
 
-contenedor.append(encabezado);
+secTitulo.append(encabezado);
    
+
+let segSeccion = document.getElementById("segundaSeccion")
+let i = 0
 for (const plan of planes) {
     let columna = document.createElement("div")
     columna.className = "col-md-3 m-3"
@@ -43,9 +48,24 @@ for (const plan of planes) {
             <p class="card-text">${plan.nombre}</p>
             <p class="card-text"> Cantidad de clases: ${plan.clases}</p>
             <p class="card-text"> Precio final: ${plan.precio*plan.clases*plan.descuento}</p>
+            <button id="${botones[i]}"> Conoce más </button>
         </div>
     </div>`;
-
-    contenedor.append(columna);
+    i++;
+    segSeccion.append(columna);
 }
 
+let btnUno = document.getElementById("botonUno")
+btnUno.addEventListener("click", () => {
+    alert("Este plan cuenta con un 10% de descuento. Trabajaremos flexibilidad y aeróbico dos veces por semana, por dos semanas")
+})
+
+let btnDos = document.getElementById("botonDos")
+btnDos.addEventListener("click", () => {
+    alert("Este plan cuenta con un 15% de descuento. Trabajaremos flexibilidad, resistencia, aeróbico y fuerza tres veces por semana, por cuatro semanas")
+})
+
+let btnTres = document.getElementById("botonTres")
+btnTres.addEventListener("click", () => {
+    alert("Este plan cuenta con un 20% de descuento. Trabajaremos flexibilidad, resistencia, aeróbico, fuerza y estabilidad tres veces por semana, por ocho semanas")
+})

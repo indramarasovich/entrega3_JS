@@ -5,40 +5,34 @@ let planes = [  { nombre: "Plan x2 semanas", precio: 500, clases: 4, descuento: 
 
 const botones = ["botonUno", "botonDos", "botonTres"];
 
-class Persona {
-    constructor(nombre, edad) {
-        this.nombre = nombre.toUpperCase();
-        this.edad = edad;
+let clientes = [];
+let formulario;
+let seccion;
+let inputNombre;
+let inputEdad;
+let inputEmail;
+let tabla;
+
+class Clientes {
+    constructor(nombre, edad, email, pack) {
+      this.nombre = nombre.toUpperCase();
+      this.edad = edad;
+      this.email = email;
+      this.pack = pack;
     }
+  }
+
+function inicializar() {
+    formulario = document.getElementById("formulario");
+    seccion = document.getElementById("seccion")
+    inputNombre = document.getElementById("inputNombre");
+    inputEdad = document.getElementById("inputEdad");
+    inputEmail = document.getElementById("inputEmail");
+    tabla = document.getElementById("tablaClientes");
 }
 
-function inicio() {
-    let opcion = alert("¡Bienvenido a Meta Movimiento!");
-}
-
-
-let secTitulo = document.getElementById("seccionTitulo")
-
-inicio()
-let nombre = prompt("Ingrese su nombre: ");
-    let edad = prompt("Ingrese su edad: ");
-    let cliente = new Persona(
-        nombre,
-        edad
-        );
-
-let encabezado = document.createElement("div")
-encabezado.className = "text-center"
-encabezado.innerHTML = `
-<div>
-    <h3>Bienvenido ${cliente.nombre}</h3>
-</div>`;
-
-secTitulo.append(encabezado);
-   
-
-let segSeccion = document.getElementById("segundaSeccion")
-let i = 0
+function mostrarPlanes() {
+    let i = 0
 for (const plan of planes) {
     let columna = document.createElement("div")
     columna.className = "col-md-3 m-3"
@@ -48,11 +42,11 @@ for (const plan of planes) {
             <p class="card-text">${plan.nombre}</p>
             <p class="card-text"> Cantidad de clases: ${plan.clases}</p>
             <p class="card-text"> Precio final: ${plan.precio*plan.clases*plan.descuento}</p>
-            <button id="${botones[i]}"> Conoce más </button>
+            <button id="${botones[i]}"> + INFO </button>
         </div>
     </div>`;
     i++;
-    segSeccion.append(columna);
+    seccion.append(columna);
 }
 
 let btnUno = document.getElementById("botonUno")
@@ -69,3 +63,63 @@ let btnTres = document.getElementById("botonTres")
 btnTres.addEventListener("click", () => {
     alert("Este plan cuenta con un 20% de descuento. Trabajaremos flexibilidad, resistencia, aeróbico, fuerza y estabilidad tres veces por semana, por ocho semanas")
 })
+}
+
+function inicializarEventos() {
+    formulario.onsubmit = (event) => validarFormulario(event);
+  }
+
+function validarFormulario(event) {
+    event.preventDefault();
+    let nombre = inputNombre.value;
+    let edad = parseInt(inputEdad.value);
+    let email = inputEmail.value;
+    let cliente = new Clientes(nombre, edad, email);
+    clientes.push(cliente);
+    formulario.reset();
+  
+    limpiarTabla();
+    agregarClientesTabla();
+    almacenarClientesLocalStorage();
+  }
+  
+  function agregarClientesTabla() {
+    clientes.forEach((cliente) => {
+      let filaTabla = document.createElement("tr");
+      filaTabla.innerHTML = `
+        <td>${cliente.nombre}</td>
+        <td>${cliente.edad}</td>
+        <td>${cliente.email}</td>`;
+      tabla.tBodies[0].append(filaTabla);
+    });
+  }
+  
+  function limpiarTabla() {
+    while (tabla.rows.length > 1) {
+      tabla.deleteRow(1);
+    }
+  }
+  
+  function almacenarClientesLocalStorage() {
+    localStorage.setItem("listaClientes", JSON.stringify(clientes));
+  }
+  
+  function obtenerClientesLocalStorage() {
+    let clientesAlmacenados = localStorage.getItem("listaClientes");
+    console.log(typeof clientesAlmacenados)
+    if (clientesAlmacenados !== null) {
+      clientes = JSON.parse(clientesAlmacenados);
+    }
+  }
+
+
+function main() {
+    inicializar();
+    mostrarPlanes();
+    inicializarEventos();
+    obtenerClientesLocalStorage();
+    agregarClientesTabla();
+}
+
+main();
+

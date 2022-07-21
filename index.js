@@ -72,15 +72,18 @@ function inicializarEventos() {
 function validarFormulario(event) {
     event.preventDefault();
     let nombre = inputNombre.value;
+    nombre || alert("No ingresó nombre")
     let edad = parseInt(inputEdad.value);
+    edad || alert("No ingresó edad")
     let email = inputEmail.value;
-    let cliente = new Clientes(nombre, edad, email);
-    clientes.push(cliente);
+    email || alert("No ingresó email")
+    let cliente  = new Clientes(nombre, edad, email);
+    clientes.push(cliente) 
     formulario.reset();
   
     limpiarTabla();
     agregarClientesTabla();
-    almacenarClientesLocalStorage();
+    almacenarClientesSessionStorage();
   }
   
   function agregarClientesTabla() {
@@ -100,12 +103,12 @@ function validarFormulario(event) {
     }
   }
   
-  function almacenarClientesLocalStorage() {
-    localStorage.setItem("listaClientes", JSON.stringify(clientes));
+  function almacenarClientesSessionStorage() {
+    sessionStorage.setItem("listaClientes", JSON.stringify(clientes));
   }
   
-  function obtenerClientesLocalStorage() {
-    let clientesAlmacenados = localStorage.getItem("listaClientes");
+  function obtenerClientesSessionStorage() {
+    let clientesAlmacenados = sessionStorage.getItem("listaClientes");
     console.log(typeof clientesAlmacenados)
     if (clientesAlmacenados !== null) {
       clientes = JSON.parse(clientesAlmacenados);
@@ -117,7 +120,7 @@ function main() {
     inicializar();
     mostrarPlanes();
     inicializarEventos();
-    obtenerClientesLocalStorage();
+    obtenerClientesSessionStorage();
     agregarClientesTabla();
 }
 
